@@ -296,7 +296,7 @@
     <div class="intro">
       <div id="introDefault">
         <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמח שתענו בהקדם על הטופס עם המועדים המועדפים עליכם.</div>
-        <div><strong>יש לבחור לפחות 4 מועדים אפשריים מבחינתכם (ועד 6)</strong>, ואנו נשבץ בהתאם.</div>
+        <div><strong>יש לבחור לפחות 3 מועדים אפשריים מבחינתכם (ועד 6)</strong>, ואנו נשבץ בהתאם.</div>
         <div>אל דאגה, לא נקבע לילדים מועד שלא יתאים לכם. יהיו מס' אפשרויות לבחירה במהלך השבוע, ובכל מקרה שעות התרגול הסופיות יקבעו באישורכם בלבד.</div>
         <div>* ניתן לבחור בכל אחד מהמועדים ללא קשר לביה"ס בו אתם לומדים.</div>
         <div>** השעות בטבלה יתאימו ללוח הצלצולים הבית ספרי.</div>
@@ -582,7 +582,7 @@
   var FREETEXT_CITY = 'כפר סבא';
 
   var MAX_SLOTS = 6;
-  var MIN_SLOTS = 4;
+  var MIN_SLOTS = 3;
   var slotInputs = [];
   var selectedOrder = []; // checkbox elements, in the order the parent picked them
 
@@ -894,7 +894,7 @@
         ok = false;
       }
     } else if (selectedOrder.length < MIN_SLOTS){
-      setError('slots', 'יש לבחור לפחות 4 מועדים');
+      setError('slots', 'יש לבחור לפחות 3 מועדים');
       ok = false;
     }
 
