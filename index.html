@@ -937,15 +937,19 @@
   // Blank for ranks beyond however many the parent actually picked. For
   // כפר סבא (free text by day, not a ranked list) the same 6 columns are
   // reused day-by-day instead: column 1 = יום א', column 2 = יום ב', ...,
-  // column 5 = יום ה' — each holding that day's school end time (column 6
-  // stays blank, there's no 6th weekday).
+  // column 5 = יום ה' — each holding that day's school end time AND clubs,
+  // if given (column 6 stays blank, there's no 6th weekday).
   function getSlotsPriorityArray(){
     var arr = ['', '', '', '', '', ''];
     if (cityEl.value === FREETEXT_CITY){
       var byDay = getFreeTextByDay();
       DAYS.forEach(function(d, i){
         var info = byDay[d];
-        if (info && info.end) arr[i] = dayNamesFull[d] + ' - ' + info.end;
+        if (!info) return;
+        var parts = [];
+        if (info.end) parts.push('סיום לימודים ' + info.end);
+        if (info.clubs) parts.push('חוגים: ' + info.clubs);
+        if (parts.length) arr[i] = dayNamesFull[d] + ' - ' + parts.join(', ');
       });
       return arr;
     }
