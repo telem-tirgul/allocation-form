@@ -901,18 +901,25 @@
     return ok;
   }
 
+  // for כפר סבא: groups the free-text table's inputs by day, e.g.
+  // {"א": {end:"14:00", clubs:"כדורסל"}, "ג": {end:"13:15"}}
+  function getFreeTextByDay(){
+    var byDay = {};
+    freeTextInputs.forEach(function(inp){
+      var val = inp.value.trim();
+      if (!val) return;
+      var day = inp.dataset.day;
+      byDay[day] = byDay[day] || {};
+      byDay[day][inp.dataset.row] = val;
+    });
+    return byDay;
+  }
+
   // plain-text summary of the chosen slots (priority-ranked table) or, for כפר סבא,
   // the free-text day-by-day info — shared between the WhatsApp message and the Sheet row
   function getSlotsSummaryText(){
     if (cityEl.value === FREETEXT_CITY){
-      var byDay = {};
-      freeTextInputs.forEach(function(inp){
-        var val = inp.value.trim();
-        if (!val) return;
-        var day = inp.dataset.day;
-        byDay[day] = byDay[day] || {};
-        byDay[day][inp.dataset.row] = val;
-      });
+      var byDay = getFreeTextByDay();
       return DAYS.filter(function(d){ return byDay[d]; }).map(function(d){
         var info = byDay[d];
         var parts = [];
@@ -927,11 +934,21 @@
   }
 
   // one string per priority rank (1–6), for the Sheet's separate columns.
-  // Blank for ranks beyond however many the parent actually picked, and for
-  // כפר סבא (free text by day, not a ranked list — doesn't apply there).
+  // Blank for ranks beyond however many the parent actually picked. For
+  // כפר סבא (free text by day, not a ranked list) the same 6 columns are
+  // reused day-by-day instead: column 1 = יום א', column 2 = יום ב', ...,
+  // column 5 = יום ה' — each holding that day's school end time (column 6
+  // stays blank, there's no 6th weekday).
   function getSlotsPriorityArray(){
     var arr = ['', '', '', '', '', ''];
-    if (cityEl.value === FREETEXT_CITY) return arr;
+    if (cityEl.value === FREETEXT_CITY){
+      var byDay = getFreeTextByDay();
+      DAYS.forEach(function(d, i){
+        var info = byDay[d];
+        if (info && info.end) arr[i] = dayNamesFull[d] + ' - ' + info.end;
+      });
+      return arr;
+    }
     selectedOrder.forEach(function(cb, i){
       if (i >= MAX_SLOTS) return;
       arr[i] = dayNamesFull[cb.dataset.day] + ', ' + cb.dataset.time + ' - ' + cb.dataset.group;
