@@ -306,7 +306,7 @@
     <div class="intro">
       <div id="introDefault">
         <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמח שתענו בהקדם על הטופס עם המועדים המועדפים עליכם.</div>
-        <div><strong>יש לבחור לפחות <span id="introMinSlots">4</span> מועדים אפשריים מבחינתכם (ועד 6)</strong>, ואנו נשבץ בהתאם.</div>
+        <div><strong>יש לבחור לפחות <span id="introMinSlots">4</span> מועדים אפשריים מבחינתכם (ועד 10)</strong>, ואנו נשבץ בהתאם.</div>
         <div>אל דאגה, לא נקבע לילדים מועד שלא יתאים לכם. יהיו מס' אפשרויות לבחירה במהלך השבוע, ובכל מקרה שעות התרגול הסופיות יקבעו באישורכם בלבד.</div>
         <div><strong>* ניתן לבחור בכל אחד מהמועדים ללא קשר לביה"ס בו אתם לומדים.</strong></div>
         <div><strong>** השעות בטבלה יתאימו ללוח הצלצולים הבית ספרי.</strong></div>
@@ -444,7 +444,7 @@
 
       <div id="slotsContent" hidden>
         <div class="hint" style="margin-bottom:14px;">
-          לחצו על התאים המתאימים לכם לפי סדר עדיפות - התא הראשון שתבחרו יהיה עדיפות 1, השני עדיפות 2 וכן הלאה (מינימום <span id="hintMinSlots">4</span>, עד 6 מועדים). כל תא הוא מיקום ושעה מסוימים.
+          לחצו על התאים המתאימים לכם לפי סדר עדיפות - התא הראשון שתבחרו יהיה עדיפות 1, השני עדיפות 2 וכן הלאה (מינימום <span id="hintMinSlots">4</span>, עד 10 מועדים). כל תא הוא מיקום ושעה מסוימים.
         </div>
 
         <div class="slots-wrap">
@@ -599,7 +599,7 @@
   var FREETEXT_CITIES = ['כפר סבא', 'רמת גן'];
   function isFreeTextCity(city){ return FREETEXT_CITIES.indexOf(city) !== -1; }
 
-  var MAX_SLOTS = 6;
+  var MAX_SLOTS = 10;
   // מינימום מועדים לבחירה - שונה בין הערים (ראש העין: 4, הוד השרון: 3).
   // נפילה בחזרה ל-3 עבור כל עיר אחרת (לא אמור לקרות בפועל, כי ערים בלי
   // תבנית קבועה בכלל לא מציגות את טבלת הבחירה).
@@ -635,7 +635,7 @@
     slotInputs.forEach(function(cb){
       cb.disabled = atMax && selectedOrder.indexOf(cb) === -1;
     });
-    prioritiesMax.textContent = atMax ? 'הגעתם למספר המקסימלי (6). כדי לבחור תא אחר, בטלו סימון של אחד הקיימים.' : '';
+    prioritiesMax.textContent = atMax ? 'הגעתם למספר המקסימלי (10). כדי לבחור תא אחר, בטלו סימון של אחד הקיימים.' : '';
 
     setError('slots', '');
   }
@@ -972,14 +972,15 @@
     }).join('\n');
   }
 
-  // one string per priority rank (1–6), for the Sheet's separate columns.
+  // one string per priority rank (1–10), for the Sheet's separate columns.
   // Blank for ranks beyond however many the parent actually picked. For
-  // כפר סבא (free text by day, not a ranked list) the same 6 columns are
-  // reused day-by-day instead: column 1 = יום א', column 2 = יום ב', ...,
-  // column 5 = יום ה' — each holding that day's school end time AND clubs,
-  // if given (column 6 stays blank, there's no 6th weekday).
+  // free-text cities (day-by-day, not a ranked list) the first 5 of these
+  // columns are reused day-by-day instead: column 1 = יום א', column 2 =
+  // יום ב', ..., column 5 = יום ה' — each holding that day's school end
+  // time AND clubs, if given (columns 6-10 stay blank, there's no 6th-10th
+  // weekday).
   function getSlotsPriorityArray(){
-    var arr = ['', '', '', '', '', ''];
+    var arr = ['', '', '', '', '', '', '', '', '', ''];
     if (isFreeTextCity(cityEl.value)){
       var byDay = getFreeTextByDay();
       DAYS.forEach(function(d, i){
