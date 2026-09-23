@@ -255,8 +255,10 @@
   }
 
   .submit-note{
-    max-width:420px; margin:14px auto 0; font-size:13px; color:var(--ink-soft);
-    font-weight:600; line-height:1.6;
+    max-width:460px; margin:0 auto 18px; font-size:15.5px; color:var(--maroon);
+    font-weight:700; line-height:1.6;
+    background:#FBEBD2; border:1.5px solid var(--gold-deep); border-radius:12px;
+    padding:14px 18px;
   }
 
   footer{ text-align:center; margin-top:34px; font-size:12px; color:var(--ink-soft); opacity:.7; }
@@ -289,6 +291,7 @@
           <option value="הוד השרון">הוד השרון</option>
           <option value="כפר סבא">כפר סבא</option>
           <option value="ראש העין">ראש העין</option>
+          <option value="רמת גן">רמת גן</option>
           <option value="אחר">אחר</option>
         </select>
         <div class="error-msg" data-for="f-city"></div>
@@ -303,10 +306,10 @@
     <div class="intro">
       <div id="introDefault">
         <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמח שתענו בהקדם על הטופס עם המועדים המועדפים עליכם.</div>
-        <div><strong>יש לבחור לפחות 3 מועדים אפשריים מבחינתכם (ועד 6)</strong>, ואנו נשבץ בהתאם.</div>
+        <div><strong>יש לבחור לפחות <span id="introMinSlots">4</span> מועדים אפשריים מבחינתכם (ועד 6)</strong>, ואנו נשבץ בהתאם.</div>
         <div>אל דאגה, לא נקבע לילדים מועד שלא יתאים לכם. יהיו מס' אפשרויות לבחירה במהלך השבוע, ובכל מקרה שעות התרגול הסופיות יקבעו באישורכם בלבד.</div>
-        <div>* ניתן לבחור בכל אחד מהמועדים ללא קשר לביה"ס בו אתם לומדים.</div>
-        <div>** השעות בטבלה יתאימו ללוח הצלצולים הבית ספרי.</div>
+        <div><strong>* ניתן לבחור בכל אחד מהמועדים ללא קשר לביה"ס בו אתם לומדים.</strong></div>
+        <div><strong>** השעות בטבלה יתאימו ללוח הצלצולים הבית ספרי.</strong></div>
       </div>
       <div id="introKfarSaba" hidden>
         <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמח שתענו בהקדם על הטופס עם שעות סיום הלימודים של בנכם/בתכם.</div>
@@ -441,7 +444,7 @@
 
       <div id="slotsContent" hidden>
         <div class="hint" style="margin-bottom:14px;">
-          לחצו על התאים המתאימים לכם לפי סדר עדיפות - התא הראשון שתבחרו יהיה עדיפות 1, השני עדיפות 2 וכן הלאה (מינימום 4, עד 6 מועדים). כל תא הוא מיקום ושעה מסוימים.
+          לחצו על התאים המתאימים לכם לפי סדר עדיפות - התא הראשון שתבחרו יהיה עדיפות 1, השני עדיפות 2 וכן הלאה (מינימום <span id="hintMinSlots">4</span>, עד 6 מועדים). כל תא הוא מיקום ושעה מסוימים.
         </div>
 
         <div class="slots-wrap">
@@ -462,7 +465,7 @@
 
       <div id="slotsFreeText" hidden>
         <div class="hint" style="margin-bottom:14px;">
-          אצלנו בכפר סבא עדיין אין לוח מועדים קבוע, לכן נשמח שתמלאו לפי הימים הרלוונטיים: שעת סיום הלימודים בבית הספר, וחוגים (אם יש) שחשוב לקחת בחשבון בקביעת מועד התרגול. אפשר למלא רק את הימים הרלוונטיים (מינימום יום אחד).
+          אצלנו ב<span id="freeTextCityName">כפר סבא</span> עדיין אין לוח מועדים קבוע, לכן נשמח שתמלאו לפי הימים הרלוונטיים: שעת סיום הלימודים בבית הספר, וחוגים (אם יש) שחשוב לקחת בחשבון בקביעת מועד התרגול. אפשר למלא רק את הימים הרלוונטיים (מינימום יום אחד).
         </div>
 
         <div class="slots-wrap">
@@ -506,8 +509,8 @@
         <div class="g-recaptcha" data-sitekey="6LetRsUtAAAAAJySjomrSFve0x8wvkFc0-2wa27a"></div>
       </div>
       <div class="error-msg" data-for="recaptcha" style="text-align:center; margin-bottom:10px;"></div>
+      <div class="submit-note">בלחיצה על הכפתור ייפתח וואטסאפ עם הודעה מסודרת שנוצרת אוטומטית לפי מה שמילאתם. <strong>יש לשלוח את ההודעה הזו כפי שהיא</strong> למספר של תלם.</div>
       <button type="submit" id="submitBtn">שליחת השיבוץ בוואטסאפ</button>
-      <div class="submit-note">בלחיצה על הכפתור ייפתח וואטסאפ עם הודעה מסודרת שנוצרת אוטומטית לפי מה שמילאתם. <strong>יש לשלוח את ההודעה הזו כפי שהיא</strong> למספר של תלם - ההרשמה נקלטת רק לאחר שההודעה נשלחת בפועל.</div>
       <div class="form-error" id="formError"></div>
     </div>
   </form>
@@ -526,7 +529,7 @@
 <script>
 (function(){
   // international format, digits only, no + or leading zeros — e.g. 972501234567
-  var WHATSAPP_NUMBER = "972522426502";
+  var WHATSAPP_NUMBER = "972529067101";
 
   // Google Apps Script Web App URL that writes each submission as a row in a Google Sheet.
   // Paste your deployment URL here (see telem-sheets-script.gs for the script + setup steps).
@@ -542,7 +545,8 @@
   var CITY_SCHOOLS = {
     "ראש העין": ["גוונים","היובל","בראשית","בארי","עומר"],
     "הוד השרון": ["הראשונים","השחר","השקמים","עתידים"],
-    "כפר סבא": ["אלון","שז\"ר","שרת","אורט שפירא"]
+    "כפר סבא": ["אלון","שז\"ר","שרת","אורט שפירא"],
+    "רמת גן": ["תיכון בליך"]
   };
 
   var DAYS = ["א","ב","ג","ד","ה"];
@@ -591,10 +595,16 @@
   var slotsThead = document.getElementById('slotsThead');
   var slotsTbody = document.querySelector('#slotsTable tbody');
   var freeTextInputs = Array.prototype.slice.call(document.querySelectorAll('#freeTextTable .ft-input'));
-  var FREETEXT_CITY = 'כפר סבא';
+  // ערים ללא לוח מועדים קבוע - מציגות במקום זאת טבלת מילוי חופשי יום-אחר-יום
+  var FREETEXT_CITIES = ['כפר סבא', 'רמת גן'];
+  function isFreeTextCity(city){ return FREETEXT_CITIES.indexOf(city) !== -1; }
 
   var MAX_SLOTS = 6;
-  var MIN_SLOTS = 3;
+  // מינימום מועדים לבחירה - שונה בין הערים (ראש העין: 4, הוד השרון: 3).
+  // נפילה בחזרה ל-3 עבור כל עיר אחרת (לא אמור לקרות בפועל, כי ערים בלי
+  // תבנית קבועה בכלל לא מציגות את טבלת הבחירה).
+  var MIN_SLOTS_BY_CITY = { "ראש העין": 4, "הוד השרון": 3 };
+  function getMinSlots(){ return MIN_SLOTS_BY_CITY[cityEl.value] || 3; }
   var slotInputs = [];
   var selectedOrder = []; // checkbox elements, in the order the parent picked them
 
@@ -730,7 +740,7 @@
   }
 
   function renderSlotsForCity(city){
-    if (city === FREETEXT_CITY){
+    if (isFreeTextCity(city)){
       slotsPlaceholder.hidden = true;
       slotsContent.hidden = true;
       slotsFreeText.hidden = false;
@@ -811,10 +821,20 @@
 
   var introDefault = document.getElementById('introDefault');
   var introKfarSaba = document.getElementById('introKfarSaba');
+  var freeTextCityNameEl = document.getElementById('freeTextCityName');
   function renderIntroForCity(city){
-    var isKfarSaba = city === FREETEXT_CITY;
-    introKfarSaba.hidden = !isKfarSaba;
-    introDefault.hidden = isKfarSaba;
+    var isFT = isFreeTextCity(city);
+    introKfarSaba.hidden = !isFT;
+    introDefault.hidden = isFT;
+    if (isFT) freeTextCityNameEl.textContent = city;
+  }
+
+  var introMinSlotsEl = document.getElementById('introMinSlots');
+  var hintMinSlotsEl = document.getElementById('hintMinSlots');
+  function renderMinSlotsForCity(){
+    var n = getMinSlots();
+    introMinSlotsEl.textContent = n;
+    hintMinSlotsEl.textContent = n;
   }
 
   cityEl.addEventListener('change', function(){
@@ -824,6 +844,7 @@
     renderSchoolField();
     renderSlotsForCity(cityEl.value);
     renderIntroForCity(cityEl.value);
+    renderMinSlotsForCity();
   });
 
   schoolEl.addEventListener('change', function(){
@@ -900,13 +921,13 @@
 
     setError('slots', '');
     setError('slots-freetext', '');
-    if (cityEl.value === FREETEXT_CITY){
+    if (isFreeTextCity(cityEl.value)){
       if (!freeTextFilled()){
         setError('slots-freetext', 'יש למלא לפחות שעת סיום אחת');
         ok = false;
       }
-    } else if (selectedOrder.length < MIN_SLOTS){
-      setError('slots', 'יש לבחור לפחות 3 מועדים');
+    } else if (selectedOrder.length < getMinSlots()){
+      setError('slots', 'יש לבחור לפחות ' + getMinSlots() + ' מועדים');
       ok = false;
     }
 
@@ -936,7 +957,7 @@
   // plain-text summary of the chosen slots (priority-ranked table) or, for כפר סבא,
   // the free-text day-by-day info — shared between the WhatsApp message and the Sheet row
   function getSlotsSummaryText(){
-    if (cityEl.value === FREETEXT_CITY){
+    if (isFreeTextCity(cityEl.value)){
       var byDay = getFreeTextByDay();
       return DAYS.filter(function(d){ return byDay[d]; }).map(function(d){
         var info = byDay[d];
@@ -959,7 +980,7 @@
   // if given (column 6 stays blank, there's no 6th weekday).
   function getSlotsPriorityArray(){
     var arr = ['', '', '', '', '', ''];
-    if (cityEl.value === FREETEXT_CITY){
+    if (isFreeTextCity(cityEl.value)){
       var byDay = getFreeTextByDay();
       DAYS.forEach(function(d, i){
         var info = byDay[d];
@@ -983,7 +1004,7 @@
     var city = getCityValue();
     var school = getSchoolValue();
     var parentLast = v('f-parent-last');
-    var slotsHeader = cityEl.value === FREETEXT_CITY ? '🕐 ימי לימודים ופעילויות:' : '🕐 מועדים מועדפים (לפי סדר עדיפות):';
+    var slotsHeader = isFreeTextCity(cityEl.value) ? '🕐 ימי לימודים ופעילויות:' : '🕐 מועדים מועדפים (לפי סדר עדיפות):';
     var slotsText = getSlotsSummaryText().split('\n').map(function(l){ return '   ' + l; }).join('\n');
 
     var lines = [
