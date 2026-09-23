@@ -176,6 +176,7 @@
   table.slots thead th.th-time,
   table.slots tbody td.time-td{
     position:sticky; inset-inline-start:0; z-index:2;
+    width:92px;
   }
   /* maroon line to the left of the time column, and the same style in gold
      on every second column from the left (the boundary of each day) */
@@ -212,7 +213,16 @@
     padding:9px 4px; border-radius:10px; text-align:center; white-space:nowrap;
   }
   table.freetext tbody td{ padding:4px; }
-  table.freetext tbody td.time-td{ text-align:center; background:#EFE9E2; color:var(--maroon); font-weight:800; font-size:12px; border-radius:8px; padding:9px 6px; line-height:1.4; white-space:nowrap; }
+  /* עמודת התוויות (הראשונה) - אותו padding כמו בשאר העמודות, כדי שהקופסה
+     הצבועה בפנים תהיה באותו גובה בדיוק כמו תיבות הקלט/טקסט של שאר הימים.
+     יש לבטל את הרקע של הכלל הגלובלי .time-td (המיועד לטבלת ref) כי הוא
+     מוגדר עם !important וכיסה את הפינות המעוגלות של הקופסה הפנימית. */
+  table.freetext tbody td.time-td{ padding:4px; background:transparent !important; }
+  table.freetext .time-td-box{
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    height:51px; box-sizing:border-box; background:#EFE9E2; color:var(--maroon);
+    font-weight:800; font-size:12px; border-radius:8px; line-height:1.4; white-space:nowrap;
+  }
   /* freeze the label column while scrolling the table horizontally */
   table.freetext thead th.th-time,
   table.freetext tbody td.time-td{
@@ -320,13 +330,13 @@
 
     <div class="intro">
       <div id="introDefault">
-        <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמח שתענו בהקדם על הטופס עם המועדים המועדפים עליכם.</div>
+        <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמח שתמלאו בהקדם את הטופס עם המועדים המועדפים עליכם.</div>
         <div><strong>יש לבחור לפחות <span id="introSlotsRange">4-6</span> מועדים אפשריים מבחינתכם</strong>, ואנו נשבץ בהתאם את שני מועדי התרגול הקבועים תוך התחשבות מרבית בהעדפותיכם.</div>
         <div>מאחר שיש מספר מינימלי של נרשמים הנדרש לפתיחת כל מועד, ככל שתבחרו יותר אפשרויות - כך יגדל הסיכוי שהמועד המועדף עליכם ייפתח בפועל.</div>
         <div><b>אל דאגה</b>, לא נקבע לילדים מועד שלא יתאים לכם, ובכל מקרה שני מועדי התרגול הקבועים ייקבעו באישורכם בלבד.</div>
       </div>
       <div id="introKfarSaba" hidden>
-        <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמח שתענו בהקדם על הטופס עם שעות סיום הלימודים של בנכם/בתכם.</div>
+        <div>בימים אלו אנו עומלים על קביעת לו"ז שיעורי התרגול שיתקיימו בחטיבות הביניים. על מנת שנוכל להתחיל כמתוכנן, נשמע שתמלאו בהקדם את הטופס עם שעות סיום הלימודים של בנכם/בתכם.</div>
         <div>יש לרשום בכל יום באיזו שעה (שעה מדוייקת, לא 'שם' השעה) מסתיים יום הלימודים בהתאם למערכת השעות האישית הבית-ספרית שלכם. במידה ויש לילד/ה חוג או פעילות מסויימת מיד בתום יום הלימודים יש לציין זאת.</div>
         <div>יש לרשום שעה מדוייקת לדוג' 13:45 ולא את 'שם' השעה לדוג' לא לכתוב שעה שישית.</div>
         <div><b>אל דאגה</b>, לא נקבע לילדים מועד שלא יתאים לכם, ובכל מקרה שני מועדי התרגול הקבועים ייקבעו באישורכם בלבד.</div>
@@ -497,7 +507,7 @@
             </thead>
             <tbody>
               <tr>
-                <td class="time-td">שעת סיום<br>בית ספר</td>
+                <td class="time-td"><span class="time-td-box">שעת סיום<br>בית ספר</span></td>
                 <td><input type="text" class="ft-input" data-day="א" data-row="end" placeholder="לדוג' 14:00"></td>
                 <td><input type="text" class="ft-input" data-day="ב" data-row="end" placeholder="לדוג' 14:00"></td>
                 <td><input type="text" class="ft-input" data-day="ג" data-row="end" placeholder="לדוג' 14:00"></td>
@@ -505,7 +515,7 @@
                 <td><input type="text" class="ft-input" data-day="ה" data-row="end" placeholder="לדוג' 14:00"></td>
               </tr>
               <tr>
-                <td class="time-td">חוגים</td>
+                <td class="time-td"><span class="time-td-box">חוגים</span></td>
                 <td><textarea class="ft-input ft-textarea" rows="2" data-day="א" data-row="clubs" placeholder="שם החוג + שעת התחלה"></textarea></td>
                 <td><textarea class="ft-input ft-textarea" rows="2" data-day="ב" data-row="clubs" placeholder="שם החוג + שעת התחלה"></textarea></td>
                 <td><textarea class="ft-input ft-textarea" rows="2" data-day="ג" data-row="clubs" placeholder="שם החוג + שעת התחלה"></textarea></td>
@@ -600,7 +610,7 @@
       times: ["13:30/13:45-14:30","14:15/14:30-15:15","15:15-16:00"],
       breakAfterIndex: -1,
       grid: [
-        [ [{cls:'g-br',name:'עתידים'}], [{cls:'g-gv',name:'הראשונים'}], [{cls:'g-bo',name:'השחר'}], [{cls:'g-br',name:'עתידים'}], [{cls:'g-gv',name:'הראשונים'},{cls:'g-bo',name:'השחר'}] ],
+        [ [{cls:'g-br',name:'עתידים'}], [{cls:'g-bo',name:'השחר'}], [{cls:'g-gv',name:'הראשונים'}], [{cls:'g-br',name:'עתידים'}], [{cls:'g-gv',name:'הראשונים'},{cls:'g-bo',name:'השחר'}] ],
         [ [{cls:'g-br',name:'עתידים'}], [{cls:'g-bo',name:'השחר'}], [{cls:'g-gv',name:'הראשונים'}], [{cls:'g-br',name:'עתידים'}], [{cls:'g-gv',name:'הראשונים'},{cls:'g-bo',name:'השחר'}] ],
         [ [{cls:'g-gv',name:'הראשונים'}], [{cls:'g-br',name:'עתידים'}], [{cls:'g-bo',name:'השחר'}], [{cls:'g-gv',name:'הראשונים'}], [{cls:'g-br',name:'עתידים'}] ]
       ]
