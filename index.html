@@ -197,6 +197,9 @@
   .slot2 input:checked + .slot2-face{ border-color:var(--maroon); box-shadow:inset 0 0 0 1.5px var(--maroon); }
   .slot2 input:disabled:not(:checked) + .slot2-face{ opacity:.35; cursor:not-allowed; }
   .slot2 input:focus-visible + .slot2-face{ box-shadow:0 0 0 3px rgba(90,18,22,.25); }
+  /* מועד סגור להרשמה (תא דהוי) - דהוי יותר מתא רגיל שהגיע למקסימום הבחירות,
+     ולא ניתן ללחיצה כלל (ה-checkbox מגיע disabled מראש מ-buildSlotsTable) */
+  .slot2 input:disabled:not(:checked) + .slot2-face.transparent-cell{ opacity:.55; cursor:not-allowed; }
   .slot2-badge{
     position:absolute; top:-7px; inset-inline-end:-7px;
     min-width:19px; height:19px; padding:0 3px; border-radius:999px;
@@ -469,6 +472,8 @@
           </table>
         </div>
 
+        <div class="hint" id="slotsFadedNote" style="text-align:center; margin-top:10px;" hidden>המועד נסגר להרשמה</div>
+
         <div class="priorities" id="prioritiesBox">
           <div class="priorities-title">העדיפויות שנבחרו (לפי סדר):</div>
           <ol class="priorities-list" id="prioritiesList"></ol>
@@ -588,19 +593,20 @@
       // שמעל הטבלה ("** השעות בטבלה יתאימו ללוח הצלצולים הבית ספרי")
       footnoteRows: [0, 1, 2],
       grid: (function(){
+        // faded:true = מועד סגור להרשמה (תא דהוי) - לא ניתן לבחירה
         var A = [ // 13:00–15:15
-          [{cls:'g-gv',name:'גוונים/היובל'},{cls:'g-bo',name:'בארי/עומר'}],
-          [{cls:'g-gv',name:'גוונים/היובל'},{cls:'g-br',name:'בראשית'}],
-          [{cls:'g-gv',name:'גוונים/היובל'},{cls:'g-bo',name:'בארי/עומר'}],
-          [{cls:'g-br',name:'בראשית'},{cls:'g-bo',name:'בארי/עומר'}],
-          [{cls:'g-gv',name:'גוונים/היובל'},{cls:'g-br',name:'בראשית'}]
+          [{cls:'g-gv',name:'גוונים/היובל',faded:true},{cls:'g-bo',name:'בארי/עומר',faded:true}],
+          [{cls:'g-gv',name:'גוונים/היובל'},{cls:'g-br',name:'בראשית',faded:true}],
+          [{cls:'g-gv',name:'גוונים/היובל'},{cls:'g-bo',name:'בארי/עומר',faded:true}],
+          [{cls:'g-br',name:'בראשית'},{cls:'g-bo',name:'בארי/עומר',faded:true}],
+          [{cls:'g-gv',name:'גוונים/היובל',faded:true},{cls:'g-br',name:'בראשית',faded:true}]
         ];
         var B = [ // 15:30–17:00
           [{cls:'g-br',name:'בראשית'},{cls:'g-bo',name:'בארי/עומר'}],
           [{cls:'g-bo',name:'בארי/עומר'},{cls:'g-br',name:'בראשית'}],
           [{cls:'g-br',name:'בראשית'},{cls:'g-bo',name:'בארי/עומר'}],
           [{cls:'g-gv',name:'גוונים/היובל'},{cls:'g-bo',name:'בארי/עומר'}],
-          [{cls:'g-bo',name:'בארי/עומר'},{cls:'g-br',name:'בראשית'}]
+          [{cls:'g-bo',name:'בארי/עומר',faded:true},{cls:'g-br',name:'בראשית',faded:true}]
         ];
         return [A, A, A, B, B];
       })()
@@ -619,6 +625,7 @@
 
   var slotsPlaceholder = document.getElementById('slotsPlaceholder');
   var slotsContent = document.getElementById('slotsContent');
+  var slotsFadedNote = document.getElementById('slotsFadedNote');
   var slotsFreeText = document.getElementById('slotsFreeText');
   var slotsThead = document.getElementById('slotsThead');
   var slotsTbody = document.querySelector('#slotsTable tbody');
@@ -680,6 +687,9 @@
 
     var atMax = selectedOrder.length >= MAX_SLOTS;
     slotInputs.forEach(function(cb){
+      // תא דהוי (מועד סגור להרשמה) נשאר disabled לצמיתות, גם כשעדיין לא
+      // הגענו למקסימום הבחירות
+      if (cb.dataset.faded === '1') { cb.disabled = true; return; }
       cb.disabled = atMax && selectedOrder.indexOf(cb) === -1;
     });
     prioritiesMax.textContent = atMax ? 'הגעתם למספר המקסימלי (10). כדי לבחור תא אחר, בטלו סימון של אחד הקיימים.' : '';
@@ -688,6 +698,7 @@
   }
 
   function buildSlotsTable(cfg){
+    var anyFaded = false;
     // narrower tables (fewer/shorter columns, e.g. הוד השרון) don't need as much
     // min-width as the wider 2-hub-per-day grid (e.g. ראש העין)
     document.getElementById('slotsTable').style.minWidth = (cfg.minWidth || 900) + 'px';
@@ -753,6 +764,13 @@
           var face = document.createElement('span');
           face.className = 'slot2-face ' + hub.cls;
           face.textContent = hub.name;
+          if (hub.faded){
+            face.classList.add('transparent-cell');
+            input.disabled = true;
+            input.dataset.faded = '1';
+            label.title = 'המועד נסגר להרשמה';
+            anyFaded = true;
+          }
           var badge = document.createElement('span');
           badge.className = 'slot2-badge';
           label.appendChild(input);
@@ -765,6 +783,8 @@
 
       slotsTbody.appendChild(tr);
     });
+
+    slotsFadedNote.hidden = !anyFaded;
 
     slotInputs = Array.prototype.slice.call(document.querySelectorAll('#slotsTable input[type=checkbox]'));
     selectedOrder = [];
