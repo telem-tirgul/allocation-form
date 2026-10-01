@@ -200,6 +200,17 @@
   /* מועד סגור להרשמה (תא דהוי) - דהוי יותר מתא רגיל שהגיע למקסימום הבחירות,
      ולא ניתן ללחיצה כלל (ה-checkbox מגיע disabled מראש מ-buildSlotsTable) */
   .slot2 input:disabled:not(:checked) + .slot2-face.transparent-cell{ opacity:.55; cursor:not-allowed; }
+
+  /* tooltip מותאם-אישית שמוצג מעל תא דהוי בריחוף עכבר (ראו showCellTip/hideCellTip) */
+  .cell-tip{
+    position:fixed; z-index:50; pointer-events:none;
+    transform:translate(-50%,-100%);
+    background:var(--maroon); color:#fff; font-size:12px; font-weight:700;
+    padding:6px 10px; border-radius:6px; white-space:nowrap;
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
+    opacity:0; transition:opacity .1s;
+  }
+  .cell-tip.show{ opacity:1; }
   .slot2-badge{
     position:absolute; top:-7px; inset-inline-end:-7px;
     min-width:19px; height:19px; padding:0 3px; border-radius:999px;
@@ -630,6 +641,42 @@
   var slotsThead = document.getElementById('slotsThead');
   var slotsTbody = document.querySelector('#slotsTable tbody');
   var freeTextInputs = Array.prototype.slice.call(document.querySelectorAll('#freeTextTable .ft-input'));
+
+  // tooltip מותאם-אישית לתאים דהויים (מועד סגור להרשמה) - tooltip מובנה
+  // (title) של הדפדפן לא תמיד מופיע בכל ריחוף עכבר כשעוברים ישר מתא לתא
+  // סמוך בלי להזיז את העכבר החוצה קודם, אז בונים tooltip עצמאי שמופיע/נעלם
+  // בכל mouseenter/mouseleave באופן אמין.
+  var FADED_TIP_TEXT = 'תא דהוי - המועד נסגר להרשמה';
+  var cellTip = null;
+  function ensureCellTip(){
+    if (!cellTip){
+      cellTip = document.createElement('div');
+      cellTip.className = 'cell-tip';
+      cellTip.textContent = FADED_TIP_TEXT;
+      document.body.appendChild(cellTip);
+    }
+    return cellTip;
+  }
+  function showCellTip(targetEl){
+    var tip = ensureCellTip();
+    var r = targetEl.getBoundingClientRect();
+    tip.style.left = (r.left + r.width / 2) + 'px';
+    tip.style.top = (r.top - 8) + 'px';
+    tip.classList.add('show');
+  }
+  function hideCellTip(){
+    if (cellTip) cellTip.classList.remove('show');
+    if (cellTipHideTimer){ clearTimeout(cellTipHideTimer); cellTipHideTimer = null; }
+  }
+  // במובייל אין ריחוף עכבר - אז בנגיעה בתא דהוי מציגים את אותו tooltip, עם
+  // הסתרה אוטומטית אחרי כמה שניות (או מיד אם נוגעים במקום אחר במסך)
+  var cellTipHideTimer = null;
+  function showCellTipOnTouch(targetEl){
+    showCellTip(targetEl);
+    if (cellTipHideTimer) clearTimeout(cellTipHideTimer);
+    cellTipHideTimer = setTimeout(hideCellTip, 2200);
+  }
+  document.addEventListener('touchstart', hideCellTip, {passive:true});
   // ערים ללא לוח מועדים קבוע - מציגות במקום זאת טבלת מילוי חופשי יום-אחר-יום
   // ערים ללא לוח מועדים קבוע ("רעננה" ו"אבן יהודה" נוספו כערים בלי טבלה קבועה
   // ובלי רשימת בתי ספר משלהן - לכן מוצגות כמו כפר סבא, כדי שהטופס יישאר
@@ -768,7 +815,12 @@
             face.classList.add('transparent-cell');
             input.disabled = true;
             input.dataset.faded = '1';
-            label.title = 'המועד נסגר להרשמה';
+            label.addEventListener('mouseenter', function(){ showCellTip(label); });
+            label.addEventListener('mouseleave', hideCellTip);
+            label.addEventListener('touchstart', function(e){
+              e.stopPropagation(); // לא להפעיל את ה-touchstart הגלובלי שמסתיר tooltip
+              showCellTipOnTouch(label);
+            }, {passive:true});
             anyFaded = true;
           }
           var badge = document.createElement('span');
